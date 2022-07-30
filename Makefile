@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = -g
+CXXFLAGS = -g -lpthread
 
 azalea_sourcedir := src
 azalea_objdir := obj
