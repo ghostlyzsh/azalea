@@ -75,7 +75,7 @@ void PacketCoder::writeVarInt(std::vector<char> *buffer, int value) {
     }
 }
 void PacketCoder::writeString(std::vector<char> *buffer, char* value) {
-    int length = sizeof(value);
+    int length = strlen(value);
     PacketCoder::writeVarInt(buffer, length);
     for(int i = 0; i < length; i++) {
         PacketCoder::writeByte(buffer, value[i]);

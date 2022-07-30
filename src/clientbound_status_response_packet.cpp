@@ -18,10 +18,7 @@ void ClientboundStatusResponsePacket::write() {
     std::vector<char> length_buffer;
 
     PacketCoder::writeVarInt(&length_buffer, 0x00);
-    PacketCoder::writeVarInt(&length_buffer, std::strlen(data));
     PacketCoder::writeString(&length_buffer, data);
-
-    //std::cout << length_buffer.size() << std::endl;
 
     //length
     PacketCoder::writeVarInt(&(this->buffer), length_buffer.size());

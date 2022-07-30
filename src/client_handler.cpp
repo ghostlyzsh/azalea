@@ -30,7 +30,7 @@ void* ClientHandler::run_socket() {
                     packet.log();
                 } else if(state == 1) {
                     // status packet
-                    //std::cout << "Status Request Packet Received" << std::endl;
+                    std::cout << "Status Request Packet Received" << std::endl;
                     ClientboundStatusResponsePacket packet;
                     packet.write();
                     packet.send(this->socket_fd);
@@ -46,6 +46,8 @@ void* ClientHandler::run_socket() {
                 ClientboundPongResponsePacket packetOut;
                 packetOut.write(packet.payload);
                 packetOut.send(this->socket_fd);
+                close(this->socket_fd);
+                pthread_exit(&this->thread);
                 break;
         }
 

@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <iostream>
 #include <vector>
+#include <cstring>
 
 class PacketCoder {
 public:
