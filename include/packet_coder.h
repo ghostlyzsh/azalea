@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include "uuid.h"
 
 class PacketCoder {
 public:
@@ -20,10 +21,14 @@ public:
     static short readShort(int socket_fd);
     static unsigned short readUnsignedShort(int socket_fd);
     static long long readLong(int socket_fd);
+    static bool readBool(int socket_fd);
+    static char* readByteArray(int socket_fd, int length);
+    static UUID readUUID(int socket_fd);
 
     static void writeVarInt(std::vector<char> *buffer, int input);
     static void writeByte(std::vector<char> *buffer, char input);
     static void writeString(std::vector<char> *buffer, char* input);
     static void writeLong(std::vector<char> *buffer, long input);
+    static void writeUUID(std::vector<char> *buffer, UUID input);
 private:
 };

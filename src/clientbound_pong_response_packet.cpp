@@ -4,7 +4,7 @@ void ClientboundPongResponsePacket::write(long long payload) {
     std::vector<char> length_buffer;
 
     PacketCoder::writeVarInt(&length_buffer, 3);
-    PacketCoder::writeVarInt(&length_buffer, 8);
+    PacketCoder::writeLong(&length_buffer, payload);
 
     //length
     PacketCoder::writeVarInt(&(this->buffer), length_buffer.size());

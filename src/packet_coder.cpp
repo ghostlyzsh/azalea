@@ -24,11 +24,7 @@ int PacketCoder::readVarInt(int socket_fd) {
 
 char* PacketCoder::readString(int socket_fd) {
     int length = PacketCoder::readVarInt(socket_fd);
-    char* string = (char*)malloc(length * sizeof(char));
-    for(int i = 0; i < length; i++) {
-        string[i] = PacketCoder::readByte(socket_fd);
-    }
-    return string;
+    return PacketCoder::readByteArray(socket_fd, length);
 }
 
 short PacketCoder::readShort(int socket_fd) {
@@ -54,6 +50,46 @@ long long PacketCoder::readLong(int socket_fd) {
     return result;
 }
 
+bool PacketCoder::readBool(int socket_fd) {
+    int value = readByte(socket_fd);
+    if(value == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+char* PacketCoder::readByteArray(int socket_fd, int length) {
+    char* string = (char*)malloc(length * sizeof(char));
+    for(int i = 0; i < length; i++) {
+        string[i] = PacketCoder::readByte(socket_fd);
+    }
+    return string;
+}
+
+UUID PacketCoder::readUUID(int socket_fd) {
+    long long higher = 0;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF) << 56;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF) << 48;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF) << 40;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF) << 32;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF) << 24;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF) << 16;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF) << 8;
+    higher |= (PacketCoder::readByte(socket_fd) & 0xFF);
+    long long lower = 0;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF) << 56;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF) << 48;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF) << 40;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF) << 32;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF) << 24;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF) << 16;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF) << 8;
+    lower |= (PacketCoder::readByte(socket_fd) & 0xFF);
+
+    UUID uuid(higher, lower);
+}
+
 char PacketCoder::readByte(int socket_fd) {
     char buf;
     recv(socket_fd, &buf, 1, MSG_WAITALL);
@@ -74,6 +110,7 @@ void PacketCoder::writeVarInt(std::vector<char> *buffer, int value) {
         value = (int) uvalue;
     }
 }
+
 void PacketCoder::writeString(std::vector<char> *buffer, char* value) {
     int length = strlen(value);
     PacketCoder::writeVarInt(buffer, length);
@@ -87,6 +124,19 @@ void PacketCoder::writeLong(std::vector<char> *buffer, long value) {
     for (int i = 0; i < 8; i++) {
         operatingValue = value >> (i * 8);
         PacketCoder::writeByte(buffer, (char) (operatingValue & 0xFF));
+    }
+}
+
+void PacketCoder::writeUUID(std::vector<char> *buffer, UUID value) {
+    long long higher;
+    for (int i = 0; i < 8; i++) {
+        higher = value.higher >> (i * 8);
+        PacketCoder::writeByte(buffer, (char) (higher & 0xFF));
+    }
+    long long lower;
+    for (int i = 0; i < 8; i++) {
+        lower = value.lower >> (i * 8);
+        PacketCoder::writeByte(buffer, (char) (lower & 0xFF));
     }
 }
 

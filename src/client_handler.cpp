@@ -27,19 +27,22 @@ void* ClientHandler::run_socket() {
                     ServerboundHandshakePacket packet;
                     packet.read(this->socket_fd);
                     state = packet.next_state;
-                    packet.log();
                 } else if(state == 1) {
                     // status packet
-                    std::cout << "Status Request Packet Received" << std::endl;
                     ClientboundStatusResponsePacket packet;
                     packet.write();
                     packet.send(this->socket_fd);
-                } else {
-                    //std::cout << "Strange" << std::endl;
+                } else if (state == 2) {
+                    ServerboundLoginStartPacket packet;
+                    packet.read(this->socket_fd);
+                    packet.log();
+
+                    ClientboundLoginSuccessPacket packetOut;
+                    packetOut.write(packet.username);
+                    packetOut.send(this->socket_fd);
                 }
                 break;
             case 1:
-                std::cout << "Ping" << std::endl;
                 ServerboundPingRequestPacket packet;
                 packet.read(this->socket_fd);
                 
