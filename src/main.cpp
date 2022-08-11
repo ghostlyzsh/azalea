@@ -7,10 +7,15 @@
 #include <errno.h>
 #include <pthread.h>
 #include "client_handler.h"
+#include "entity/entity_handler.h"
 #include <iostream>
 #include <sys/select.h>
 
 #define PORT 25566
+
+int PacketCoder::zeroAmount = 0;
+
+int EntityHandler::currentId = 0;
 
 int server_fd;
 
@@ -38,6 +43,8 @@ int main(int argc, char const* argv[]) {
         perror("The server failed to beging listening for clients.");
         exit(EXIT_FAILURE);
     }
+
+    // TODO: add server.properties
 
     while(true) {
         ClientHandler handler(server_fd, address, addrlen);

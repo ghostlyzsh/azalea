@@ -93,6 +93,12 @@ UUID PacketCoder::readUUID(int socket_fd) {
 char PacketCoder::readByte(int socket_fd) {
     char buf;
     recv(socket_fd, &buf, 1, MSG_WAITALL);
+    if(buf == 0) {
+        PacketCoder::zeroAmount++;
+    }
+    if(PacketCoder::zeroAmount > 10) {
+        close(socket_fd);
+    }
     return buf;
 }
 
@@ -140,6 +146,31 @@ void PacketCoder::writeUUID(std::vector<char> *buffer, UUID value) {
     }
 }
 
+void PacketCoder::writeShort(std::vector<char> *buffer, short value) {
+    long operatingValue;
+    for (int i = 0; i < 2; i++) {
+        operatingValue = value >> (i * 8);
+        PacketCoder::writeByte(buffer, (char) (operatingValue & 0xFF));
+    }
+}
+
+void PacketCoder::writeUnsignedShort(std::vector<char> *buffer, unsigned short value) {
+    PacketCoder::writeShort(buffer, value);
+}
+
+void PacketCoder::writeBool(std::vector<char> *buffer, bool value) {
+    char writeVal = (value) ? 1 : 0;
+    PacketCoder::writeByte(buffer, writeVal);
+}
+
+void PacketCoder::writeUnsignedByte(std::vector<char> *buffer, unsigned char input) {
+    PacketCoder::writeByte(buffer, input);
+}
+
 void PacketCoder::writeByte(std::vector<char> *buffer, char input) {
     buffer->push_back(input);
 }
+
+// ===================================
+// ========= tag functions ===========
+// ===================================

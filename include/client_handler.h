@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <iostream>
 #include "packet_coder.h"
+#include "entity/entity_handler.h"
 
 #include "serverbound_handshake_packet.h"
 #include "serverbound_ping_request_packet.h"

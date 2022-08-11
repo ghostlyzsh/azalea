@@ -30,5 +30,16 @@ public:
     static void writeString(std::vector<char> *buffer, char* input);
     static void writeLong(std::vector<char> *buffer, long input);
     static void writeUUID(std::vector<char> *buffer, UUID input);
-private:
+    static void writeShort(std::vector<char> *buffer, short value);
+    static void writeUnsignedShort(std::vector<char> *buffer, unsigned short value);
+    static void writeUnsignedByte(std::vector<char> *buffer, unsigned char input);
+    static void writeBool(std::vector<char> *buffer, bool value);
+
+    // ===================================
+    // ========= tag functions ===========
+    // ===================================
+    static void readTagByte(int socket_fd);
+
+    static int zeroAmount;
+
 };
