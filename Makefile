@@ -23,4 +23,4 @@ dirs:
 bin/azalea: $(azalea_source_cxx)
 	@echo "Compiling azalea."
 	@echo "  CXX $^"
-	@$(CXX) $(CXXFLAGS) $(LDFLAGS) -I './include' -std=c++17 $^ lib/libz.a -o $@ -O0
+	@$(CXX) $(CXXFLAGS) $(LDFLAGS) -I './include' -std=c++17 $^ lib/libz.a -o $@

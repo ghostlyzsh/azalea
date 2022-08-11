@@ -3,7 +3,7 @@
 std::string ZlibHandler::compress(const std::string& str,
                             int compressionlevel = Z_BEST_COMPRESSION)
 {
-    z_stream zs;                        // z_stream is zlib's control structure
+    z_stream zs;                        // z_stream is zlib's control structur
     memset(&zs, 0, sizeof(zs));
 
     if (deflateInit(&zs, compressionlevel) != Z_OK)
