@@ -15,8 +15,6 @@
 
 int PacketCoder::zeroAmount = 0;
 
-int EntityHandler::currentId = 0;
-
 int server_fd;
 
 int main(int argc, char const* argv[]) {
